@@ -1,0 +1,31 @@
+{
+  "name": "jn-axios",
+  "version": "1.0.0",
+  "description": "一套公共请求服务解决方案",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nuibia/jn-axios.git"
+  },
+  "keywords": [
+    "axios",
+    "request"
+  ],
+  "author": "jiangniao",
+  "bugs": {
+    "url": "https://github.com/Nuibia/jn-axios/issues"
+  },
+  "homepage": "https://github.com/Nuibia/jn-axios#readme",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "qs": "^6.13.0"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.16",
+    "@umijs/fabric": "^4.0.1"
+  }
+}

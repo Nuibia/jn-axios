@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  // 永远读取本地的配置文件
+  "stylelint.config": null,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+}

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ES2017",
+            "DOM"
+        ],
+        "module": "commonjs",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "strict": true,
+        "target": "es5",
+        "declaration": true,
+        "outDir": "dist"
+    },
+    "include": [
+        "index.ts"
+    ]
+}
