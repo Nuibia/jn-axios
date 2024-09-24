@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Button, message } from 'antd';
+import { jnAxiosGet } from '../../index.ts';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  //接口正常
+  const fetchData1 = async () => {
+    const res = await jnAxiosGet<{ name: string }>('/api/get/200');
+    if (res) {
+      console.log(res);
+      message.success(res.name);
+    }
+  };
+  // 逻辑报错
+  const fetchData2 = async () => {
+    const res = await jnAxiosGet<{ name: string }>('/api/get/10001');
+    if (res) {
+      res.resultMsg && message.error(res.resultMsg);
+    }
+    console.log(res);
+  };
+  // 触发action的逻辑报错--如退出登录
+  const fetchData3 = async () => {
+    const res = await jnAxiosGet<{ name: string }>('/api/get/400');
+    if (res) {
+      message.success(res.name);
+    }
+    console.log(res);
+  };
 
   return (
-    <>
+    <div>
+      <p>get请求</p>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Button onClick={fetchData1}>正确get请求</Button>
+        <Button onClick={fetchData2}>逻辑报错get请求</Button>
+        <Button onClick={fetchData3}>触发action的逻辑报错-退出登录-get请求</Button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <p>post请求</p>
+    </div>
+  );
 }
 
-export default App
+export default App;

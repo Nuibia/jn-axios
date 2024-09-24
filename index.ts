@@ -89,25 +89,25 @@ export function jnAxiosInit({
   // 请求拦截
   axiosInstance.interceptors.request.use(config => {
     // TODO:特殊处理，具体看业务
-    const { csrfTokenVague = [], csrfToken } = extraHeader;
-    config.headers.common.xClientAjaxStartTime = Date.now();
-    const { url } = config;
+    // const { csrfTokenVague = [], csrfToken } = extraHeader;
+    // config.headers.common.xClientAjaxStartTime = Date.now();
+    // const { url } = config;
 
-    csrfTokenVague.forEach((item: string) => {
-      const index = item.indexOf('*');
-      if (url) {
-        const str = url.substr(0, index);
-        if (!item.split('*').includes(str)) {
-          config.headers.csrfToken = localStorage.getItem('csrfToken');
-        }
-      }
-    });
+    // csrfTokenVague.forEach((item: string) => {
+    //   const index = item.indexOf('*');
+    //   if (url) {
+    //     const str = url.substr(0, index);
+    //     if (!item.split('*').includes(str)) {
+    //       config.headers.csrfToken = localStorage.getItem('csrfToken');
+    //     }
+    //   }
+    // });
 
-    if (url && csrfToken) {
-      if (!csrfToken.includes(url)) {
-        config.headers.csrfToken = localStorage.getItem('csrfToken');
-      }
-    }
+    // if (url && csrfToken) {
+    //   if (!csrfToken.includes(url)) {
+    //     config.headers.csrfToken = localStorage.getItem('csrfToken');
+    //   }
+    // }
     return {
       ...config,
       headers: { ...config.headers, ...headers },
