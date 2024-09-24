@@ -1,5 +1,5 @@
 import { Button, message } from 'antd';
-import { jnAxiosGet, jnAxiosPost } from '../../index.ts';
+import { jnAxiosGet, jnAxiosPost } from 'jn-axios';
 import './App.css';
 
 function App() {

@@ -1,7 +1,7 @@
 import { message } from 'antd';
+import { jnAxiosInit } from 'jn-axios';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { jnAxiosInit } from '../../index.ts';
 import App from './App.tsx';
 import './index.css';
 
