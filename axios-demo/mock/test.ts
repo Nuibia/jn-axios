@@ -40,9 +40,8 @@ export default [
   {
     url: '/api/post',
     method: 'post',
-    timeout: 2000,
     response: {
-      code: 0,
+      code: 200,
       data: {
         name: 'vben',
       },

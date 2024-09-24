@@ -1,5 +1,5 @@
 import { Button, message } from 'antd';
-import { jnAxiosGet } from '../../index.ts';
+import { jnAxiosGet, jnAxiosPost } from '../../index.ts';
 import './App.css';
 
 function App() {
@@ -27,6 +27,14 @@ function App() {
     }
     console.log(res);
   };
+  // 触发action的逻辑报错--如退出登录
+  const fetchData4 = async () => {
+    const res = await jnAxiosPost<{ name: string }>('/api/post', {});
+    if (res) {
+      message.success(res.name);
+    }
+    console.log(res);
+  };
 
   return (
     <div>
@@ -37,6 +45,7 @@ function App() {
         <Button onClick={fetchData3}>触发action的逻辑报错-退出登录-get请求</Button>
       </div>
       <p>post请求</p>
+      <Button onClick={fetchData4}>正确post请求</Button>
     </div>
   );
 }
