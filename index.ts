@@ -118,8 +118,10 @@ export function jnAxiosInit({
   axiosInstance.interceptors.response.use(
     res => {
       // 2xx 范围内的状态码都会触发该函数。
+      // console.log('response success', res);
       return res;
     },
+    // 请求报错，非业务报错
     error => {
       // 超出 2xx 范围的请求状态码都会触发该函数，这里触发第三层捕获，如登录失效之类的，通过exceptionCallBack，在初始化时，使用的项目自己控制
       console.error('jn-axios requestError', error);

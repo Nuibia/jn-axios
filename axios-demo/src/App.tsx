@@ -1,5 +1,6 @@
 import { Button, message } from 'antd';
-import { jnAxiosGet, jnAxiosPost } from 'jn-axios';
+// import { jnAxiosGet, jnAxiosPost } from 'jn-axios';
+import { jnAxiosGet, jnAxiosPost } from '../../index';
 import './App.css';
 
 function App() {
@@ -15,7 +16,11 @@ function App() {
   const fetchData2 = async () => {
     const res = await jnAxiosGet<{ name: string }>('/api/get/10001');
     if (res) {
-      res.resultMsg && message.error(res.resultMsg);
+      // if (res.resultMsg) {
+      //   message.error(res.resultMsg);
+      // } else {
+      //   console.log('success', res);
+      // }
     }
     console.log(res);
   };
