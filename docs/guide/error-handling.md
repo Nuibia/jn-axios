@@ -1,170 +1,258 @@
 # 错误处理
 
-JN-Axios 提供了三层错误处理机制，让你能够更好地控制和处理请求过程中的各种异常情况。
+本章节将介绍 JN-Axios 的错误处理机制。
 
-## 错误处理层级
+## 错误处理示例
 
-### 第一层：请求异常捕获
+下面是一个错误处理的示例，您可以点击不同的按钮来触发不同类型的错误：
 
-这一层处理网络请求过程中的异常，比如网络错误、超时等。这些错误会触发 `exceptionMsg` 和 `exceptionCallBack`。
+<DemoContainer>
+  <ErrorHandlingDemo />
+  <template #code>
 
 ```typescript
-jnAxiosInit({
-  exceptionMsg: '网络请求失败，请检查网络连接',
-  exceptionCallBack: (msg, error) => {
-    // 处理网络层面的错误
-    console.error('网络错误:', msg);
-    showToast(msg);
-  },
-});
+import { jnAxiosGet } from 'jn-axios';
+
+// 处理业务逻辑错误
+const handleBusinessError = async () => {
+  try {
+    const res = await jnAxiosGet('/api/user/invalid');
+    console.log(res);
+  } catch (error) {
+    if (error.code === 10001) {
+      console.error('业务错误:', error.message);
+    }
+  }
+};
+
+// 处理特殊状态码
+const handleSpecialCode = async () => {
+  try {
+    const res = await jnAxiosGet('/api/auth/check');
+    console.log(res);
+  } catch (error) {
+    if (error.code === 400) {
+      console.log('用户已退出登录');
+      // 执行退出登录逻辑
+    }
+  }
+};
+
+// 处理网络错误
+const handleNetworkError = async () => {
+  try {
+    const res = await jnAxiosGet('/api/timeout');
+    console.log(res);
+  } catch (error) {
+    console.error('网络错误:', error.message);
+  }
+};
 ```
 
-### 第二层：业务状态码处理
+  </template>
+</DemoContainer>
 
-这一层处理服务端返回的非成功状态码，但是这些状态码在 `expectCodeList` 中定义为特殊处理的情况。
+## 错误处理配置
+
+JN-Axios 提供了全局的错误处理配置：
+
+<DemoContainer>
+  <template #code>
 
 ```typescript
+import { jnAxiosInit } from 'jn-axios';
+import { message } from 'antd';
+
 jnAxiosInit({
-  // 定义需要特殊处理的状态码
-  expectCodeList: [401, 403],
-  exceptionCallBack: (msg, error) => {
-    const response = error.response;
-    if (response) {
-      switch (response.data.code) {
-        case 401:
-          // 处理未授权
-          redirectToLogin();
+  // 成功状态码
+  successCode: 200,
+
+  // 全局异常提示信息
+  exceptionMsg: '服务异常，请稍后重试',
+
+  // 特殊状态码列表
+  expectCodeList: [10001, 400],
+
+  // 异常回调处理
+  exceptionCallBack: function (msg, error) {
+    if (!error) {
+      message.error(msg);
+      return;
+    }
+
+    if ('data' in error) {
+      switch (error.data.code) {
+        case 400:
+          // 处理退出登录
+          message.info('用户已退出登录');
+          // 跳转到登录页
+          window.location.href = '/login';
           break;
-        case 403:
-          // 处理权限不足
-          showNoPermissionMessage();
+
+        case 10001:
+          // 处理业务错误
+          message.error(error.data.message);
           break;
+
+        default:
+          // 处理其他错误
+          message.error(msg);
       }
     }
   },
 });
 ```
 
-### 第三层：业务异常处理
+  </template>
+</DemoContainer>
 
-这一层处理除了上述两种情况之外的业务异常，即不在 `successCode` 和 `expectCodeList` 中的状态码。
+## 错误类型
+
+### 1. 业务逻辑错误
+
+业务逻辑错误通常是由后端返回的特定错误码标识的错误，例如：
+
+- 表单验证失败
+- 记录不存在
+- 权限不足
+
+这类错误可以通过 `expectCodeList` 配置来识别和处理：
+
+<DemoContainer>
+  <template #code>
 
 ```typescript
 jnAxiosInit({
-  // 定义成功的状态码
-  successCode: 200,
+  expectCodeList: [10001, 10002, 10003],
   exceptionCallBack: (msg, error) => {
-    // 处理其他业务异常
-    if (error.response?.data?.message) {
-      showErrorMessage(error.response.data.message);
+    if (error?.data?.code === 10001) {
+      console.error('表单验证失败:', error.data.message);
+    } else if (error?.data?.code === 10002) {
+      console.error('记录不存在:', error.data.message);
+    } else if (error?.data?.code === 10003) {
+      console.error('权限不足:', error.data.message);
     }
   },
 });
 ```
 
-## 错误处理最佳实践
+  </template>
+</DemoContainer>
 
-### 1. 全局错误处理
+### 2. 特殊状态码
 
-在应用入口处配置全局错误处理：
+特殊状态码通常表示需要特殊处理的情况，例如：
+
+- 未登录（401）
+- 无权限（403）
+- 会话过期（440）
+
+这类错误可以在 `exceptionCallBack` 中统一处理：
+
+<DemoContainer>
+  <template #code>
 
 ```typescript
-import { jnAxiosInit } from 'jn-axios';
-import { message } from 'antd'; // 使用你的 UI 库的提示组件
-
 jnAxiosInit({
-  successCode: 200,
-  expectCodeList: [401, 403],
-  exceptionMsg: '服务异常，请稍后重试',
   exceptionCallBack: (msg, error) => {
-    // 网络错误
-    if (!error.response) {
-      message.error('网络连接异常，请检查网络');
-      return;
-    }
+    if (!error?.data?.code) return;
 
-    // 特殊状态码处理
-    const { code } = error.response.data;
-    switch (code) {
+    switch (error.data.code) {
       case 401:
-        message.error('登录已过期，请重新登录');
         // 跳转到登录页
         window.location.href = '/login';
         break;
       case 403:
-        message.error('没有权限访问该资源');
+        message.error('您没有权限访问此资源');
         break;
-      default:
-        message.error(msg || '请求失败');
+      case 440:
+        message.info('会话已过期，请重新登录');
+        // 清除本地存储
+        localStorage.clear();
+        // 跳转到登录页
+        window.location.href = '/login';
+        break;
     }
   },
 });
 ```
 
-### 2. 请求级别错误处理
+  </template>
+</DemoContainer>
 
-对于特定请求，你可以通过检查返回值来处理特定的错误情况：
+### 3. 网络错误
 
-```typescript
-const handleSubmit = async (data: FormData) => {
-  const result = await jnAxiosPost<SubmitResponse>('/api/submit', data);
+网络错误包括：
 
-  if (!result) {
-    // 请求失败，已经被全局错误处理器处理
-    return;
-  }
+- 请求超时
+- 网络连接失败
+- 服务器错误（500）
 
-  if (result.expectAxiosCode === 400) {
-    // 处理表单验证错误
-    handleValidationErrors(result.response?.data);
-    return;
-  }
+这类错误可以在请求时通过 try/catch 处理，也可以在全局配置中处理：
 
-  // 请求成功，处理正常业务逻辑
-  handleSuccess(result);
-};
-```
-
-### 3. 错误恢复
-
-在某些情况下，你可能需要在错误发生后进行恢复操作：
+<DemoContainer>
+  <template #code>
 
 ```typescript
-const fetchData = async () => {
+// 请求级别处理
+const handleRequest = async () => {
   try {
-    const result = await jnAxiosGet<DataType>('/api/data');
-    if (!result) {
-      // 加载备用数据或显示友好的错误提示
-      loadFallbackData();
-      return;
-    }
-    processData(result);
+    const res = await jnAxiosGet('/api/data');
+    return res;
   } catch (error) {
-    // 处理其他未预期的错误
-    console.error('Unexpected error:', error);
-    showFallbackUI();
+    if (error.isAxiosError) {
+      if (error.code === 'ECONNABORTED') {
+        console.error('请求超时');
+      } else if (!error.response) {
+        console.error('网络连接失败');
+      } else if (error.response.status === 500) {
+        console.error('服务器错误');
+      }
+    }
+    throw error;
   }
 };
-```
 
-## 调试错误
-
-JN-Axios 在开发环境下会输出详细的错误信息到控制台，帮助你更好地调试问题：
-
-```typescript
+// 全局处理
 jnAxiosInit({
   exceptionCallBack: (msg, error) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.group('JN-Axios Error');
-      console.error('Error Message:', msg);
-      console.error('Error Details:', error);
-      console.error('Request Config:', error.config);
-      console.error('Response:', error.response);
-      console.groupEnd();
+    if (error?.isAxiosError) {
+      if (error.code === 'ECONNABORTED') {
+        message.error('请求超时，请稍后重试');
+      } else if (!error.response) {
+        message.error('网络连接失败，请检查网络');
+      } else if (error.response.status === 500) {
+        message.error('服务器错误，请联系管理员');
+      }
     }
-
-    // 生产环境下的错误处理
-    handleProductionError(msg, error);
   },
 });
 ```
+
+  </template>
+</DemoContainer>
+
+## 最佳实践
+
+1. **统一错误处理**
+
+   - 在全局配置中处理通用错误
+   - 在请求级别处理特殊错误
+   - 提供友好的错误提示
+
+2. **错误分类**
+
+   - 明确区分业务错误和技术错误
+   - 为不同类型的错误提供不同的处理策略
+   - 合理使用错误码
+
+3. **错误恢复**
+   - 提供重试机制
+   - 保存用户操作状态
+   - 提供回退方案
+
+## 下一步
+
+- 了解[基本用法](./basic-usage.md)
+- 探索[配置选项](./configuration.md)
+- 查看更多[示例](/examples/)

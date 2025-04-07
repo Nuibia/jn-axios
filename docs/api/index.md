@@ -146,7 +146,3 @@ interface IDiyAxiosResponseData<T = any> {
 ```typescript
 type typeDiyAxiosResponse<T = any> = AxiosResponse<IDiyAxiosResponseData<T>> | false;
 ```
-
-## 类型定义
-
-更多详细的类型定义，请查看 [类型定义](./types.md) 章节。

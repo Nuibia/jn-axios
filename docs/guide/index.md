@@ -77,4 +77,3 @@ const createUser = async () => {
 - 了解更多[基本用法](./basic-usage.md)
 - 探索[错误处理](./error-handling.md)机制
 - 查看[配置选项](./configuration.md)
-- 浏览[示例代码](/examples/)

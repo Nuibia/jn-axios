@@ -10,7 +10,6 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '指南', link: '/guide/' },
       { text: 'API', link: '/api/' },
-      { text: '示例', link: '/examples/' },
     ],
     sidebar: {
       '/guide/': [
@@ -21,16 +20,6 @@ export default defineConfig({
             { text: '基本用法', link: '/guide/basic-usage' },
             { text: '错误处理', link: '/guide/error-handling' },
             { text: '配置选项', link: '/guide/configuration' },
-          ],
-        },
-      ],
-      '/examples/': [
-        {
-          text: '示例',
-          items: [
-            { text: '基础请求', link: '/examples/basic' },
-            { text: '错误处理', link: '/examples/error-handling' },
-            { text: '高级配置', link: '/examples/advanced' },
           ],
         },
       ],
