@@ -198,4 +198,4 @@ const createUser = async () => {
 ## 下一步
 
 - 了解[错误处理](./error-handling.md)
-- 探索[配置选项](./configuration.md)
+- 查看[API 文档](/api/)

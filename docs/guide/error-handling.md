@@ -254,4 +254,4 @@ jnAxiosInit({
 ## 下一步
 
 - 了解[基本用法](./basic-usage.md)
-- 探索[配置选项](./configuration.md)
+- 查看[API 文档](/api/)
