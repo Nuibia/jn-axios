@@ -2,40 +2,35 @@ import { defineConfig } from 'vitepress';
 
 export default defineConfig({
   title: 'JN-Axios',
-  description: '一个基于 Axios 的 HTTP 请求库封装',
+  description: '基于 Axios 的 HTTP 请求封装库',
   lang: 'zh-CN',
   themeConfig: {
+    siteTitle: 'JN-Axios',
     nav: [
       { text: '首页', link: '/' },
       { text: '指南', link: '/guide/' },
       { text: 'API', link: '/api/' },
+      { text: '示例', link: '/examples/' },
     ],
     sidebar: {
       '/guide/': [
         {
-          text: '介绍',
+          text: '指南',
           items: [
-            { text: '什么是 JN-Axios?', link: '/guide/' },
-            { text: '快速开始', link: '/guide/getting-started' },
+            { text: '快速开始', link: '/guide/' },
             { text: '基本用法', link: '/guide/basic-usage' },
-          ],
-        },
-        {
-          text: '进阶',
-          items: [
             { text: '错误处理', link: '/guide/error-handling' },
-            { text: '请求配置', link: '/guide/configuration' },
-            { text: '类型系统', link: '/guide/typescript' },
+            { text: '配置选项', link: '/guide/configuration' },
           ],
         },
       ],
-      '/api/': [
+      '/examples/': [
         {
-          text: 'API 参考',
+          text: '示例',
           items: [
-            { text: '全局配置', link: '/api/' },
-            { text: '请求方法', link: '/api/methods' },
-            { text: '类型定义', link: '/api/types' },
+            { text: '基础请求', link: '/examples/basic' },
+            { text: '错误处理', link: '/examples/error-handling' },
+            { text: '高级配置', link: '/examples/advanced' },
           ],
         },
       ],
@@ -43,7 +38,7 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: 'https://github.com/your-username/jn-axios' }],
     footer: {
       message: '基于 MIT 许可发布',
-      copyright: 'Copyright © 2024-present',
+      copyright: `Copyright © ${new Date().getFullYear()}-present`,
     },
   },
 });
