@@ -290,6 +290,5 @@ jnAxiosInit({
 
 ## 下一步
 
-- 查看[基本用法](./basic-usage.md)示例
-- 了解[错误处理](./error-handling.md)机制
-- 浏览[示例代码](/examples/)
+- 了解[基本用法](./basic-usage.md)
+- 探索[错误处理](./error-handling.md)

@@ -255,4 +255,3 @@ jnAxiosInit({
 
 - 了解[基本用法](./basic-usage.md)
 - 探索[配置选项](./configuration.md)
-- 查看更多[示例](/examples/)
