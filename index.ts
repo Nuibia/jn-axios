@@ -18,7 +18,7 @@ export interface IDiyAxiosResponseData<T = any> {
 }
 
 /** 接口返回值 */
-export type typeDiyAxiosResponse<T = any> = AxiosResponse<IDiyAxiosResponseData<T>> | false; // TODO:T=any ？？
+export type typeDiyAxiosResponse<T = any> = AxiosResponse<IDiyAxiosResponseData<T>> | false; 
 
 /** 异常情况的回调函数 */
 type typeExceptionCallBack = (msg: string, error: AxiosError | typeDiyAxiosResponse) => void;
@@ -48,7 +48,7 @@ export type IDiyAxiosConfig = AxiosRequestConfig;
 export interface ExpectDiyAxiosResponse<T = any> {
   response?: typeDiyAxiosResponse<T>;
   expectAxiosCode?: number;
-  resultMsg?: string | null;
+  resultMsg?: string;
 }
 
 /** jnAxiosInit 仅执行一次 */
@@ -88,26 +88,6 @@ export function jnAxiosInit({
 
   // 请求拦截
   axiosInstance.interceptors.request.use(config => {
-    // TODO:特殊处理，具体看业务
-    // const { csrfTokenVague = [], csrfToken } = extraHeader;
-    // config.headers.common.xClientAjaxStartTime = Date.now();
-    // const { url } = config;
-
-    // csrfTokenVague.forEach((item: string) => {
-    //   const index = item.indexOf('*');
-    //   if (url) {
-    //     const str = url.substr(0, index);
-    //     if (!item.split('*').includes(str)) {
-    //       config.headers.csrfToken = localStorage.getItem('csrfToken');
-    //     }
-    //   }
-    // });
-
-    // if (url && csrfToken) {
-    //   if (!csrfToken.includes(url)) {
-    //     config.headers.csrfToken = localStorage.getItem('csrfToken');
-    //   }
-    // }
     return {
       ...config,
       headers: { ...config.headers, ...headers },
@@ -118,7 +98,6 @@ export function jnAxiosInit({
   axiosInstance.interceptors.response.use(
     res => {
       // 2xx 范围内的状态码都会触发该函数。
-      // console.log('response success', res);
       return res;
     },
     // 请求报错，非业务报错
