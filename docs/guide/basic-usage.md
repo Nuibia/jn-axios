@@ -148,9 +148,51 @@ const createUserWithConfig = async () => {
   </template>
 </DemoContainer>
 
+# 类型支持
 
+JN-Axios 提供了完整的 TypeScript 类型支持：
+
+<DemoContainer>
+  <template #code>
+
+```typescript
+// 定义响应数据类型
+interface UserResponse {
+  id: number;
+  name: string;
+  email: string;
+}
+
+// 定义请求数据类型
+interface CreateUserRequest {
+  name: string;
+  email: string;
+}
+
+// 使用类型
+const getUser = async () => {
+  const user = await jnAxiosGet<UserResponse>('/api/user/1');
+  if (user) {
+    console.log(user.name); // TypeScript 会提供类型提示
+  }
+};
+
+const createUser = async () => {
+  const data: CreateUserRequest = {
+    name: '测试用户',
+    email: 'test@example.com',
+  };
+  const user = await jnAxiosPost<UserResponse>('/api/user', data);
+  if (user) {
+    console.log(user.id); // TypeScript 会提供类型提示
+  }
+};
+```
+
+  </template>
+</DemoContainer>
 
 ## 下一步
 
 - 了解[错误处理](./error-handling.md)
-- 查看[API 文档](/api/)
+- 查看[API 参考](/guide/api-reference)

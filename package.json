@@ -29,6 +29,7 @@
     "qs": "^6.13.0"
   },
   "devDependencies": {
+    "@types/node": "^22.14.0",
     "@types/qs": "^6.9.16",
     "@umijs/fabric": "^4.0.1",
     "vitepress": "^1.6.3"

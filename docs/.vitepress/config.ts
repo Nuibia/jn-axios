@@ -10,7 +10,6 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '指南', link: '/guide/' },
-      { text: 'API', link: '/api/' },
     ],
     sidebar: {
       '/guide/': [
@@ -20,6 +19,7 @@ export default defineConfig({
             { text: '快速开始', link: '/guide/' },
             { text: '基本用法', link: '/guide/basic-usage' },
             { text: '错误处理', link: '/guide/error-handling' },
+            { text: 'API 参考', link: '/guide/api-reference' },
           ],
         },
       ],
