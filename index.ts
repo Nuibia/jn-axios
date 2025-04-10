@@ -43,7 +43,7 @@ export interface IDiyAxiosInitConfigInterface {
   extraHeader?: any;
 }
 
-export type IDiyAxiosConfig = AxiosRequestConfig;
+export type IDiyAxiosConfig = AxiosRequestConfig & {};
 
 export interface ExpectDiyAxiosResponse<T = any> {
   response?: typeDiyAxiosResponse<T>;
@@ -67,6 +67,7 @@ const DEFAULT_EXCEPTION_CALLBACK: typeExceptionCallBack = function (msg, error) 
 
 export const axiosInstance = Axios.create();
 
+// 在业务项目中，初始化axios
 export function jnAxiosInit({
   headers = {},
   successCode = DEFAULT_SUCCESS_CODE,
@@ -111,6 +112,7 @@ export function jnAxiosInit({
   isInit = true;
 }
 
+// 统一处理、拼装返回值
 function handleDiyAxiosResult<T>(res: typeDiyAxiosResponse<T>) {
   const successCode = DiyAxiosConfig.successCode;
   if (!res) {
@@ -121,12 +123,14 @@ function handleDiyAxiosResult<T>(res: typeDiyAxiosResponse<T>) {
     return false;
   }
   const code = res.data.code;
+  // 业务正常返回
   if (
     (typeof successCode === 'number' && successCode === code) ||
     (Array.isArray(successCode) && successCode.includes(res.data.code))
   ) {
     return res.data.data;
   }
+  // 业务异常返回--一般是业务报错
   if (DiyAxiosConfig.expectCodeList.includes(res.data.code)) {
     return {
       // 看业务需要
@@ -134,10 +138,10 @@ function handleDiyAxiosResult<T>(res: typeDiyAxiosResponse<T>) {
       response: res,
       resultMsg: res.data.resultMsg,
       expectAxiosCode: res.data.code,
-    };
+    } as T & ExpectDiyAxiosResponse<T>;
   }
+  // 第三层漏斗--异常情况回调，可以通过init方法在业务代码自定义action
   DiyAxiosConfig.exceptionCallBack.bind(DiyAxiosConfig)(
-    // TODO:参考业务
     res.data.resultMsg ?? res.data.message ?? '',
     res,
   );
