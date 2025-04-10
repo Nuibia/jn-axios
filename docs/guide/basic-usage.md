@@ -152,8 +152,6 @@ const createUserWithConfig = async () => {
 
 JN-Axios 提供了完整的 TypeScript 类型支持：
 
-<DemoContainer>
-  <template #code>
 
 ```typescript
 // 定义响应数据类型
@@ -188,9 +186,6 @@ const createUser = async () => {
   }
 };
 ```
-
-  </template>
-</DemoContainer>
 
 ## 下一步
 
