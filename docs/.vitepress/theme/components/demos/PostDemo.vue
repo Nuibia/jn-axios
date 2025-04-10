@@ -1,26 +1,30 @@
 <template>
-  <div class="demo-basic">
+  <div class="demo-post">
     <div class="demo-controls">
-      <button class="demo-button" @click="handleGet" :disabled="loading">
-        {{ loading && currentRequest === 'GET' ? '请求中...' : '发送 GET 请求' }}
+      <button class="demo-button" @click="handleBasicPost" :disabled="loading">
+        {{ loading && currentRequest === 'basic' ? '请求中...' : '基本 POST 请求' }}
       </button>
-      <button class="demo-button" @click="handlePost" :disabled="loading">
-        {{ loading && currentRequest === 'POST' ? '请求中...' : '发送 POST 请求' }}
+      <button class="demo-button" @click="handleConfigPost" :disabled="loading">
+        {{ loading && currentRequest === 'config' ? '请求中...' : '带配置 POST 请求' }}
       </button>
     </div>
 
     <div class="demo-info" v-if="currentRequest">
       <div class="info-item">
         <span class="info-label">请求类型：</span>
-        <span class="info-value">{{ currentRequest }}</span>
-      </div>
-      <div class="info-item" v-if="requestData">
-        <span class="info-label">请求数据：</span>
-        <pre class="info-value">{{ JSON.stringify(requestData, null, 2) }}</pre>
+        <span class="info-value">POST</span>
       </div>
       <div class="info-item">
         <span class="info-label">请求地址：</span>
-        <span class="info-value">{{ currentRequest === 'GET' ? '/api/get/200' : '/api/post' }}</span>
+        <span class="info-value">/api/user</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">请求数据：</span>
+        <pre class="info-value">{{ JSON.stringify(requestData, null, 2) }}</pre>
+      </div>
+      <div class="info-item" v-if="currentRequest === 'config'">
+        <span class="info-label">请求配置：</span>
+        <pre class="info-value">{{ JSON.stringify(requestConfig, null, 2) }}</pre>
       </div>
     </div>
 
@@ -38,12 +42,13 @@
 
 <script setup>
 import { ref } from 'vue'
-import { jnAxiosGet, jnAxiosPost, jnAxiosInit } from 'jn-axios'
+import { jnAxiosPost, jnAxiosInit } from 'jn-axios'
 
 // 初始化 JN-Axios
 jnAxiosInit({
   // 全局请求头配置
   headers: {
+    'Content-Type': 'application/json',
   },
   // 成功状态码
   successCode: 200,
@@ -54,7 +59,8 @@ jnAxiosInit({
   // 异常回调处理
   exceptionCallBack: function (msg, error) {
     if (!error) return;
-    console.error('请求错误:', msg);
+    // 在实际应用中，这里可以调用 UI 库的提示组件
+    console.error('请求错误 (来自 PostDemo):', msg);
   },
 });
 
@@ -63,49 +69,19 @@ const error = ref(null)
 const loading = ref(false)
 const currentRequest = ref('')
 const requestData = ref(null)
-
-// // 模拟请求延迟 - 不再需要
-// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+const requestConfig = ref(null)
 
 const resetState = () => {
   result.value = null
   error.value = null
   requestData.value = null
+  requestConfig.value = null
 }
 
-const handleGet = async () => {
+const handleBasicPost = async () => {
   resetState()
   loading.value = true
-  currentRequest.value = 'GET'
-
-  try {
-    // // 模拟请求延迟 - 不再需要
-    // await delay(500)
-
-    // // 模拟成功响应 - 不再需要
-    // result.value = {
-    //   code: 200,
-    //   data: {
-    //     message: 'GET 请求成功',
-    //     timestamp: new Date().toISOString()
-    //   }
-    // }
-
-    // 发送实际 GET 请求
-    const res = await jnAxiosGet('/api/get/200');
-    result.value = res;
-
-  } catch (err) { // 使用 err 捕获错误
-    error.value = err.message || '请求失败' // 使用 err.message
-  } finally {
-    loading.value = false
-  }
-}
-
-const handlePost = async () => {
-  resetState()
-  loading.value = true
-  currentRequest.value = 'POST'
+  currentRequest.value = 'basic'
 
   try {
     // 设置请求数据
@@ -114,25 +90,44 @@ const handlePost = async () => {
       email: 'test@example.com'
     }
 
-    // // 模拟请求延迟 - 不再需要
-    // await delay(500)
+    // 发送请求
+    const res = await jnAxiosPost('/api/user', requestData.value)
+    result.value = res
+  } catch (err) {
+    error.value = err.message || '请求失败'
+  } finally {
+    loading.value = false
+  }
+}
 
-    // // 模拟成功响应 - 不再需要
-    // result.value = {
-    //   code: 200,
-    //   data: {
-    //     message: 'POST 请求成功',
-    //     ...requestData.value,
-    //     timestamp: new Date().toISOString()
-    //   }
-    // }
+const handleConfigPost = async () => {
+  resetState()
+  loading.value = true
+  currentRequest.value = 'config'
 
-    // 发送实际 POST 请求
-    const res = await jnAxiosPost('/api/post', requestData.value);
-    result.value = res;
+  try {
+    // 设置请求数据
+    requestData.value = {
+      name: '测试用户',
+      email: 'test@example.com'
+    }
 
-  } catch (err) { // 使用 err 捕获错误
-    error.value = err.message || '请求失败' // 使用 err.message
+    // 设置请求配置
+    requestConfig.value = {
+      headers: {
+        'X-Custom-Header': 'value'
+      }
+    }
+
+    // 发送请求
+    const res = await jnAxiosPost(
+      '/api/user',
+      requestData.value,
+      requestConfig.value
+    )
+    result.value = res
+  } catch (err) {
+    error.value = err.message || '请求失败'
   } finally {
     loading.value = false
   }
@@ -140,7 +135,7 @@ const handlePost = async () => {
 </script>
 
 <style scoped>
-.demo-basic {
+.demo-post {
   display: flex;
   flex-direction: column;
   gap: 16px;

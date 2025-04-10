@@ -2,6 +2,33 @@
 
 本章节将通过实际示例来展示 JN-Axios 的基本用法。
 
+## 初始化配置
+
+在使用 JN-Axios 之前，您需要先进行初始化配置：
+
+```typescript
+import { jnAxiosInit } from 'jn-axios';
+
+jnAxiosInit({
+  // 全局请求头配置
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  // 成功状态码
+  successCode: 200,
+  // 异常提示信息
+  exceptionMsg: '服务异常，请稍后重试',
+  // 特殊状态码列表
+  expectCodeList: [10001],
+  // 异常回调处理
+  exceptionCallBack: function (msg, error) {
+    if (!error) return;
+    console.error('请求错误:', msg);
+  },
+});
+```
+
+
 ## 基础请求示例
 
 下面是一个简单的请求示例，您可以直接点击按钮查看效果：
@@ -40,43 +67,12 @@ const handlePost = async () => {
   </template>
 </DemoContainer>
 
-## 初始化配置
-
-在使用 JN-Axios 之前，您需要先进行初始化配置：
-
-<DemoContainer>
-  <template #code>
-
-```typescript
-import { jnAxiosInit } from 'jn-axios';
-
-jnAxiosInit({
-  // 全局请求头配置
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  // 成功状态码
-  successCode: 200,
-  // 异常提示信息
-  exceptionMsg: '服务异常，请稍后重试',
-  // 特殊状态码列表
-  expectCodeList: [10001],
-  // 异常回调处理
-  exceptionCallBack: function (msg, error) {
-    if (!error) return;
-    console.error('请求错误:', msg);
-  },
-});
-```
-
-  </template>
-</DemoContainer>
-
 ## GET 请求
 
 发起一个 GET 请求：
 
 <DemoContainer>
+  <GetDemo />
   <template #code>
 
 ```typescript
@@ -112,6 +108,7 @@ const getDataWithParams = async () => {
 发起一个 POST 请求：
 
 <DemoContainer>
+  <PostDemo />
   <template #code>
 
 ```typescript
@@ -151,49 +148,7 @@ const createUserWithConfig = async () => {
   </template>
 </DemoContainer>
 
-## 类型支持
 
-JN-Axios 提供了完整的 TypeScript 类型支持：
-
-<DemoContainer>
-  <template #code>
-
-```typescript
-// 定义响应数据类型
-interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
-}
-
-// 定义请求数据类型
-interface CreateUserRequest {
-  name: string;
-  email: string;
-}
-
-// 使用类型
-const getUser = async () => {
-  const user = await jnAxiosGet<UserResponse>('/api/user/1');
-  if (user) {
-    console.log(user.name); // TypeScript 会提供类型提示
-  }
-};
-
-const createUser = async () => {
-  const data: CreateUserRequest = {
-    name: '测试用户',
-    email: 'test@example.com',
-  };
-  const user = await jnAxiosPost<UserResponse>('/api/user', data);
-  if (user) {
-    console.log(user.id); // TypeScript 会提供类型提示
-  }
-};
-```
-
-  </template>
-</DemoContainer>
 
 ## 下一步
 

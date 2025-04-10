@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress';
+import path from 'node:path';
 
 export default defineConfig({
   title: 'JN-Axios',
@@ -27,6 +28,13 @@ export default defineConfig({
     footer: {
       message: '基于 MIT 许可发布',
       copyright: `Copyright © ${new Date().getFullYear()}-present`,
+    },
+  },
+  vite: {
+    resolve: {
+      alias: {
+        'jn-axios': path.resolve(__dirname, '../../index.ts'),
+      },
     },
   },
 });
