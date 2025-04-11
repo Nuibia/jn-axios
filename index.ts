@@ -36,7 +36,7 @@ export interface IDiyAxiosInitConfigInterface {
   /* 排除非 200 处理接口的异常 code 过滤处理 */
   expectCodeList: number[]; // 处理返回非200的code的请求，不报错，接口仍能拿到接口请求信息 第二层捕获-捕获非200的状态码
 
-  /* 接口 40x, 50x, code 非 200 和不在 expectCodeList 列表的回调处理。比如处理退出逻辑，目前默认 400 是退出。 */
+  /* 两次触发：1.axios的error事件，2.axios的兜底-非successCode和expectCodeList的异常捕获，丢给业务代码做特殊action处理 */
   exceptionCallBack: typeExceptionCallBack; // 处理异常操作，排除200和expectCodeList的异常捕获，以回调的形式，使用者自己管理，如401无权限，需要跳转到登录页面
 
   /** 添加一些对header的额外限制 */
@@ -46,9 +46,9 @@ export interface IDiyAxiosInitConfigInterface {
 export type IDiyAxiosConfig = AxiosRequestConfig & {};
 
 export interface ExpectDiyAxiosResponse<T = any> {
-  response?: typeDiyAxiosResponse<T>;
+  expectResponse?: typeDiyAxiosResponse<T>;
   expectAxiosCode?: number;
-  resultMsg?: string;
+  expectResultMsg?: string;
 }
 
 /** jnAxiosInit 仅执行一次 */
@@ -135,8 +135,8 @@ function handleDiyAxiosResult<T>(res: typeDiyAxiosResponse<T>) {
     return {
       // 看业务需要
       ...res.data.data,
-      response: res,
-      resultMsg: res.data.resultMsg,
+      expectResponse: res,
+      expectResultMsg: res.data.resultMsg,
       expectAxiosCode: res.data.code,
     } as T & ExpectDiyAxiosResponse<T>;
   }

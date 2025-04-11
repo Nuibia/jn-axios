@@ -155,36 +155,15 @@ JN-Axios 提供了完整的 TypeScript 类型支持：
 
 ```typescript
 // 定义响应数据类型
-interface UserResponse {
-  id: number;
-  name: string;
-  email: string;
+interface IRequestPrams {
 }
 
 // 定义请求数据类型
-interface CreateUserRequest {
-  name: string;
-  email: string;
+interface IRequestResponse {
 }
 
 // 使用类型
-const getUser = async () => {
-  const user = await jnAxiosGet<UserResponse>('/api/user/1');
-  if (user) {
-    console.log(user.name); // TypeScript 会提供类型提示
-  }
-};
-
-const createUser = async () => {
-  const data: CreateUserRequest = {
-    name: '测试用户',
-    email: 'test@example.com',
-  };
-  const user = await jnAxiosPost<UserResponse>('/api/user', data);
-  if (user) {
-    console.log(user.id); // TypeScript 会提供类型提示
-  }
-};
+  const data = await jnAxiosGet<IRequestResponse,IRequestPrams>('xxx',params);
 ```
 
 ## 下一步
