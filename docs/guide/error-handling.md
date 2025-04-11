@@ -56,9 +56,6 @@ const handleNetworkError = async () => {
 
 JN-Axios 提供了全局的错误处理配置：
 
-<DemoContainer>
-  <template #code>
-
 ```typescript
 import { jnAxiosInit } from 'jn-axios';
 import { message } from 'antd';
@@ -103,9 +100,6 @@ jnAxiosInit({
 });
 ```
 
-  </template>
-</DemoContainer>
-
 ## 错误类型
 
 ### 1. 业务逻辑错误
@@ -117,9 +111,6 @@ jnAxiosInit({
 - 权限不足
 
 这类错误可以通过 `expectCodeList` 配置来识别和处理：
-
-<DemoContainer>
-  <template #code>
 
 ```typescript
 jnAxiosInit({
@@ -136,9 +127,6 @@ jnAxiosInit({
 });
 ```
 
-  </template>
-</DemoContainer>
-
 ### 2. 特殊状态码
 
 特殊状态码通常表示需要特殊处理的情况，例如：
@@ -148,9 +136,6 @@ jnAxiosInit({
 - 会话过期（440）
 
 这类错误可以在 `exceptionCallBack` 中统一处理：
-
-<DemoContainer>
-  <template #code>
 
 ```typescript
 jnAxiosInit({
@@ -177,9 +162,6 @@ jnAxiosInit({
 });
 ```
 
-  </template>
-</DemoContainer>
-
 ### 3. 网络错误
 
 网络错误包括：
@@ -190,8 +172,6 @@ jnAxiosInit({
 
 这类错误可以在请求时通过 try/catch 处理，也可以在全局配置中处理：
 
-<DemoContainer>
-  <template #code>
 
 ```typescript
 // 请求级别处理
@@ -228,28 +208,6 @@ jnAxiosInit({
   },
 });
 ```
-
-  </template>
-</DemoContainer>
-
-## 最佳实践
-
-1. **统一错误处理**
-
-   - 在全局配置中处理通用错误
-   - 在请求级别处理特殊错误
-   - 提供友好的错误提示
-
-2. **错误分类**
-
-   - 明确区分业务错误和技术错误
-   - 为不同类型的错误提供不同的处理策略
-   - 合理使用错误码
-
-3. **错误恢复**
-   - 提供重试机制
-   - 保存用户操作状态
-   - 提供回退方案
 
 ## 下一步
 
