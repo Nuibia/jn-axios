@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "一套公共请求服务解决方案",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.umd.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig.build.json",
+    "build": "rm -rf dist && rollup -c",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"
@@ -29,9 +31,15 @@
     "qs": "^6.13.0"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@types/node": "^22.14.0",
     "@types/qs": "^6.9.16",
     "@umijs/fabric": "^4.0.1",
+    "rollup": "^4.39.0",
+    "typescript": "^5.8.3",
     "vitepress": "^1.6.3"
   }
 }
